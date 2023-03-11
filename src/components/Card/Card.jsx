@@ -1,7 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from './Card.module.scss'
 
-const Card = ({imageUrl, price, title}) => {
+const Card = ({imageUrl, price, title, addSneakersToCart}) => {
+
+  const [isAdded, setIsAdded] = useState(false)
+
+  const onClickPlus =() => {
+    setIsAdded(!isAdded)
+  }
+
+  const objOfCard = {
+    imageUrl,
+    price,
+    title
+  }
+
   return (
     <div className={styles.card}>
       <div className={styles.favorite}>
@@ -14,8 +27,8 @@ const Card = ({imageUrl, price, title}) => {
           <span>Цена:</span>
           <b>{price} uah</b>
         </div>
-        <button className="button" onClick={()=>console.log('loko')}>
-          <img width={11} height={11} src="/img/plus.svg" alt="Plus" />
+        <button className="button" onClick={() => addSneakersToCart(objOfCard)}>
+          <img onClick={onClickPlus}  src={isAdded ? "/img/btn-checked.svg": "/img/btn-plus.svg"} alt="Plus" />
         </button>
       </div>
     </div>

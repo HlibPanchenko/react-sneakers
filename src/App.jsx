@@ -1,36 +1,48 @@
+import { useEffect, useState } from "react";
 import Card from "./components/Card/Card";
 import Drawer from "./components/Drawer";
 import Header from "./components/Header";
 
-const arr = [
-  {
-    title: "Мужские Кроссовки Nike Blazer Mid Suede",
-    price: 12999,
-    imageUrl: "/img/sneakers/1.png",
-  },
-  {
-    title: "Мужские Кроссовки Nike Air Max 270",
-    price: 15600,
-    imageUrl: "/img/sneakers/2.png",
-  },
-  {
-    title: "Мужские Кроссовки Nike Blazer Mid Suede",
-    price: 8499,
-    imageUrl: "/img/sneakers/3.png",
-  },
-  {
-    title: "Кроссовки Puma X Aka Boku Future Rider",
-    price: 8999,
-    imageUrl: "/img/sneakers/4.png",
-  },
-];
+
 
 function App() {
+
+  const [showDrawer, setShowDrawer] = useState(false)
+  const [addedGoods, setAddedGoods] = useState([])
+  const [items, setItems] = useState([])
+
+  useEffect(()=>{
+    async function getData() {
+      const response = await fetch('https://640c498794ce1239b0a960f7.mockapi.io/items')
+      const data = await response.json()
+      setItems(data)
+    }
+
+    getData()
+  }, [])
+
+  function onClickShowCart() {
+    setShowDrawer(true)
+  }
+
+  function onClickCloseCart() {
+    setShowDrawer(false)
+  }
+
+  // function addSneakersToCart(sneakers) {
+  //   setAddedGoods([...addedGoods, sneakers])
+  // }
+
+  function addSneakersToCart(sneakers) {
+    setAddedGoods(prev => [...prev, sneakers])
+  }
+
   return (
     <div className="wrapper clear">
-      <Drawer />
+      {showDrawer && <Drawer addedGoods={addedGoods} onClickCloseCart={onClickCloseCart}/>}
+      
 
-      <Header />
+      <Header onClickShowCart={onClickShowCart}/>
       <div className="content p-40">
         <div className="d-flex align-center justify-between mb-40">
           <h1>Все кроссовки</h1>
@@ -40,8 +52,8 @@ function App() {
           </div>
         </div>
         <div className="sneakers d-flex">
-          {arr.map((obj) => (
-            <Card title={obj.title} price={obj.price} imageUrl={obj.imageUrl} />
+          {items.map((item) => (
+            <Card key={item.price} addSneakersToCart={addSneakersToCart} title={item.title} price={item.price} imageUrl={item.imageUrl} />
           ))}
         </div>
       </div>
