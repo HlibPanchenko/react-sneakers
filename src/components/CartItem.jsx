@@ -1,6 +1,7 @@
 import React from "react";
 
-const CartItem = ({ imageUrl, price, title }) => {
+const CartItem = ({ imageUrl, price, title, id, deleteSneakersFromCart }) => {
+  
   return (
     <div className="cartItem d-flex align-center mb-20">
       <img
@@ -14,7 +15,7 @@ const CartItem = ({ imageUrl, price, title }) => {
         <p className="mb-5">{title}</p>
         <b>{price} uah</b>
       </div>
-      <img className="removeBtn" src="/img/btn-remove.svg" alt="remove" />
+      <img onClick={()=>deleteSneakersFromCart(id)} className="removeBtn" src="/img/btn-remove.svg" alt="remove" />
     </div>
   );
 };

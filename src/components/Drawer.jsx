@@ -1,7 +1,7 @@
 import React from "react";
 import CartItem from "./CartItem";
 
-const Drawer = ({onClickCloseCart, addedGoods}) => {
+const Drawer = ({onClickCloseCart, addedGoods, deleteSneakersFromCart}) => {
   return (
     <div style={{ display: "block" }} className="overlay">
       <div className="drawer">
@@ -10,7 +10,7 @@ const Drawer = ({onClickCloseCart, addedGoods}) => {
           <img onClick={onClickCloseCart} className="cu-p" src="/img/btn-remove.svg" alt="remove" />
         </h2>
         <div className="items">
-          {addedGoods.map(good =>  <CartItem {...good}/>)}
+          {addedGoods.map(good =>  <CartItem {...good} key={good.price}  deleteSneakersFromCart={deleteSneakersFromCart}/>)}
          
           
         </div>

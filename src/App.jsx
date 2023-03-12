@@ -1,32 +1,51 @@
 import { useEffect, useState } from "react";
-import Card from "./components/Card/Card";
+import axios from "axios";
+
 import Drawer from "./components/Drawer";
 import Header from "./components/Header";
-
-
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Routes,
+  Link,
+} from "react-router-dom";
+import Home from "./pages/Home";
+import Favorites from "./pages/Favorites";
 
 function App() {
+  const [showDrawer, setShowDrawer] = useState(false);
+  const [addedGoods, setAddedGoods] = useState([]);
+  const [items, setItems] = useState([]);
+  const [controlInput, setControlInput] = useState("");
+  const [favorites, setFavorites] = useState([]);
 
-  const [showDrawer, setShowDrawer] = useState(false)
-  const [addedGoods, setAddedGoods] = useState([])
-  const [items, setItems] = useState([])
+  function onChangeInput(e) {
+    setControlInput(e.target.value);
+  }
 
-  useEffect(()=>{
-    async function getData() {
-      const response = await fetch('https://640c498794ce1239b0a960f7.mockapi.io/items')
-      const data = await response.json()
-      setItems(data)
-    }
+  useEffect(() => {
+    axios
+      // .get("https://640c498794ce1239b0a960f7.mockapi.io/items")
+      .get(" http://localhost:4000/items")
+      .then((res) => setItems(res.data));
 
-    getData()
-  }, [])
+    axios
+      // .get("https://640c498794ce1239b0a960f7.mockapi.io/cart")
+      .get("http://localhost:4000/cart")
+      .then((res) => setAddedGoods(res.data));
+
+      axios
+      .get("http://localhost:4000/favorites")
+      .then((res) => setFavorites(res.data));
+  }, []);
 
   function onClickShowCart() {
-    setShowDrawer(true)
+    setShowDrawer(true);
   }
 
   function onClickCloseCart() {
-    setShowDrawer(false)
+    setShowDrawer(false);
   }
 
   // function addSneakersToCart(sneakers) {
@@ -34,30 +53,68 @@ function App() {
   // }
 
   function addSneakersToCart(sneakers) {
-    setAddedGoods(prev => [...prev, sneakers])
+    // axios.post("https://640c498794ce1239b0a960f7.mockapi.io/cart", sneakers);
+    axios.post("http://localhost:4000/cart", sneakers);
+    setAddedGoods((prev) => [...prev, sneakers]);
+  }
+
+  function deleteSneakersFromCart(id) {
+    // axios.delete(`https://640c498794ce1239b0a960f7.mockapi.io/cart/${id}`);
+    axios.delete(`http://localhost:4000/cart/${id}`);
+    setAddedGoods((prev) => prev.filter((item) => item.id !== id));
+  }
+
+  async function onAddToFavorite(sneakers) {
+    try {
+      // axios.post("https://640c498794ce1239b0a960f7.mockapi.io/cart", sneakers);
+    if (favorites.find(favorite => favorite.id == sneakers.id)) {
+      axios.delete(`http://localhost:4000/favorites/${sneakers.id}`);
+      // setFavorites((prev) => prev.filter((item) => item.id !== sneakers.id)); // визуально удалять не будем, вдруг пользователь случайно нажал
+    } else {
+      // из response вытащили data
+      const {data} = await axios.post("http://localhost:4000/favorites", sneakers);
+      console.log(data); // объект кроссовка
+      setFavorites((prev) => [...prev, data]);
+    }
+    } catch (error) {
+      alert('не удалось добавить в фавориты')
+    }
+    
+    
   }
 
   return (
-    <div className="wrapper clear">
-      {showDrawer && <Drawer addedGoods={addedGoods} onClickCloseCart={onClickCloseCart}/>}
-      
+    <Router>
+      <div className="wrapper clear">
+        {showDrawer && (
+          <Drawer
+            addedGoods={addedGoods}
+            onClickCloseCart={onClickCloseCart}
+            deleteSneakersFromCart={deleteSneakersFromCart}
+          />
+        )}
 
-      <Header onClickShowCart={onClickShowCart}/>
-      <div className="content p-40">
-        <div className="d-flex align-center justify-between mb-40">
-          <h1>Все кроссовки</h1>
-          <div className="search-block d-flex">
-            <img src="/img/search.svg" alt="search" />
-            <input type="text" placeholder="Поиск..." />
-          </div>
-        </div>
-        <div className="sneakers d-flex">
-          {items.map((item) => (
-            <Card key={item.price} addSneakersToCart={addSneakersToCart} title={item.title} price={item.price} imageUrl={item.imageUrl} />
-          ))}
-        </div>
+        <Header onClickShowCart={onClickShowCart} />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Home
+                addSneakersToCart={addSneakersToCart}
+                items={items}
+                controlInput={controlInput}
+                onAddToFavorite={onAddToFavorite}
+                onChangeInput={onChangeInput}
+              />
+            }
+          />
+          <Route
+            path="/favorites"
+            element={<Favorites favorites={favorites} onAddToFavorite={onAddToFavorite}/>}
+          />
+        </Routes>
       </div>
-    </div>
+    </Router>
   );
 }
 

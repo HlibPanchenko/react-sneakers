@@ -1,0 +1,86 @@
+{
+  "items": [
+    {
+      "title": "Мужские Кроссовки Nike Blazer Mid Suede",
+      "price": 12999,
+      "imageUrl": "/img/sneakers/1.png",
+      "id": 1
+    },
+    {
+      "title": "Мужские Кроссовки Nike Air Max 270",
+      "price": 15600,
+      "imageUrl": "/img/sneakers/2.png",
+      "id": 2
+    },
+    {
+      "title": "Мужские Кроссовки Nike Blazer Mid Suede",
+      "price": 8499,
+      "imageUrl": "/img/sneakers/3.png",
+      "id": 3
+    },
+    {
+      "title": "Кроссовки Puma X Aka Boku Future Rider",
+      "price": 1999,
+      "imageUrl": "/img/sneakers/4.png",
+      "id": 4
+    },
+    {
+      "title": "Мужские Кроссовки Nike Kyrie 7",
+      "price": 4499,
+      "imageUrl": "/img/sneakers/5.png",
+      "id": 5
+    },
+    {
+      "title": "Мужские Кроссовки Nike Kyrie Flytrap IV",
+      "price": 5699,
+      "imageUrl": "/img/sneakers/6.png",
+      "id": 6
+    },
+    {
+      "title": "Мужские Кроссовки Jordan Air Jordan 11",
+      "price": 18299,
+      "imageUrl": "/img/sneakers/7.png",
+      "id": 7
+    }
+  ],
+  "cart": [
+    {
+      "imageUrl": "/img/sneakers/6.png",
+      "price": 5699,
+      "title": "Мужские Кроссовки Nike Kyrie Flytrap IV",
+      "id": 6
+    },
+    {
+      "imageUrl": "/img/sneakers/5.png",
+      "price": 4499,
+      "title": "Мужские Кроссовки Nike Kyrie 7",
+      "id": 5
+    },
+    {
+      "imageUrl": "/img/sneakers/1.png",
+      "price": 12999,
+      "title": "Мужские Кроссовки Nike Blazer Mid Suede",
+      "id": 1
+    },
+    {
+      "imageUrl": "/img/sneakers/7.png",
+      "price": 18299,
+      "title": "Мужские Кроссовки Jordan Air Jordan 11",
+      "id": 7
+    },
+    {
+      "imageUrl": "/img/sneakers/2.png",
+      "price": 15600,
+      "title": "Мужские Кроссовки Nike Air Max 270",
+      "id": 2
+    }
+  ],
+  "favorites": [
+    {
+      "imageUrl": "/img/sneakers/2.png",
+      "price": 15600,
+      "title": "Мужские Кроссовки Nike Air Max 270",
+      "id": 2
+    }
+  ]
+}

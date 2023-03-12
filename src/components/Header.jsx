@@ -1,23 +1,35 @@
 import React from "react";
-
-const Header = ({onClickShowCart}) => {
+import {Link} from "react-router-dom";
+const Header = ({ onClickShowCart }) => {
   return (
     <header className="d-flex justify-between align-center p-40">
-      <div className="d-flex align-center">
-        <img width={40} height={40} src="/img/logo.png" alt="" />
-        <div>
-          <h3 className="text-uppercase">React Sneakers</h3>
-          <p className="opacity-5">Магазин лучших кроссовок</p>
+      <Link to="/">
+        <div className="d-flex align-center">
+          <img width={40} height={40} src="/img/logo.png" alt="" />
+          <div>
+            <h3 className="text-uppercase">React Sneakers</h3>
+            <p className="opacity-5">Магазин лучших кроссовок</p>
+          </div>
         </div>
-      </div>
+      </Link>
       <ul className="d-flex">
-        <li className="mr-30">
-          <img onClick={onClickShowCart} width={18} height={18} src="/img/cart.svg" alt="" />
-
+        <li className="mr-30 cu-p">
+          <img
+            onClick={onClickShowCart}
+            width={18}
+            height={18}
+            src="/img/cart.svg"
+            alt=""
+          />
           <span>1205 uah</span>
         </li>
+        <Link to="/favorites">
+        <li className="mr-20 cu-p">
+          <img width={18} height={18} src="/img/heart.svg" alt="favorites" />
+        </li>
+        </Link>
         <li>
-          <img width={18} height={18} src="/img/user.png" alt="" />
+          <img width={18} height={18} src="/img/user.png" alt="user" />
         </li>
       </ul>
     </header>
