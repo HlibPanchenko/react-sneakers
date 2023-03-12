@@ -54,6 +54,43 @@ header {
   cursor: pointer;
 }
 
+
+.cartEmpty {
+  text-align: center;
+
+  p {
+    margin-top: 20px;
+    width: 280px;
+    line-height: 24px;
+  }
+
+  .greenButton {
+    width: 245px;
+    // height: 55px;
+    margin-top: 40px;
+    background-color: #9DD458;
+    padding: 20px;
+    color: white;
+    border-radius: 20px;
+    border: none;
+    font-size: 16px;
+
+    &:hover {
+      img {
+        transform: rotate(180deg) translateX(3px);
+      }
+    }
+
+    img {
+      position: relative;
+      top: 1px;
+      transform: rotate(180deg);
+      margin-right: 15px;
+      transition: transform 0.15s ease-in-out;
+    }
+  }
+}
+
 .search-block {
   border: 1px solid #f3f3f3;
   border-radius: 10px;
