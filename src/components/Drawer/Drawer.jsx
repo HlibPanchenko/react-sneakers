@@ -1,16 +1,27 @@
 import React, { useState } from "react";
 import axios from "axios";
-import CartItem from "./CartItem";
-import Info from "./Info";
-import { AppContext } from "../App";
+import CartItem from "../CartItem";
+import Info from "../Info";
+import { AppContext } from "../../App";
 import { useContext } from "react";
+import { useCart } from "../../hooks/useCart";
+import styles from './Drawer.module.scss'
 
 
-
-const Drawer = ({ onClickCloseCart, deleteSneakersFromCart }) => {
-  const { addedGoods, setAddedGoods } = useContext(AppContext);
+const Drawer = ({ onClickCloseCart, deleteSneakersFromCart, opened }) => {
+  const [addedGoods, setAddedGoods, totalPrice] = useCart()
+  // const { addedGoods, setAddedGoods } = useContext(AppContext);
   const [orderID, setOrderID] = useState(null);
   const [isOrderCompleted, setIsOrderCompleted] = useState(false);
+
+  // const totalPrice = addedGoods.reduce((sum, item)=>sum + item.price,0)
+
+  // отключим скролл у бади когда корзина открыта
+  if(opened) {
+    document.body.classList.add('removeScroll')
+  } else {
+    document.body.classList.remove('removeScroll')
+  }
 
   const onclickOrder =  async () => {
    try {
@@ -28,8 +39,8 @@ const Drawer = ({ onClickCloseCart, deleteSneakersFromCart }) => {
   };
 
   return (
-    <div className="overlay">
-      <div className="drawer d-flex flex-column">
+    <div className={`${styles.overlay} ${opened ? styles.overlayVisible : ''}`}>
+      <div className={styles.drawer}>
         <h2 className="d-flex justify-between mb-30 ">
           Корзина
           <img
@@ -55,12 +66,12 @@ const Drawer = ({ onClickCloseCart, deleteSneakersFromCart }) => {
                 <li>
                   <span>Итого:</span>
                   <div></div>
-                  <b>21 498 руб. </b>
+                  <b>{totalPrice} uah </b>
                 </li>
                 <li>
                   <span>Налог 5%:</span>
                   <div></div>
-                  <b>1074 руб. </b>
+                  <b>{totalPrice / 20} uah </b>
                 </li>
               </ul>
               <button onClick={onclickOrder} className="greenButton">

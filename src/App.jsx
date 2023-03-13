@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-
-import Drawer from "./components/Drawer";
+import Orders from "./pages/Orders";
+import Drawer from "./components/Drawer/Drawer";
 import Header from "./components/Header";
-import {   BrowserRouter as Router,   Route,   Routes, } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Favorites from "./pages/Favorites";
 import { createContext, useContext } from "react";
 
-export const AppContext = createContext({})
+export const AppContext = createContext({});
 
 function App() {
   const [showDrawer, setShowDrawer] = useState(false);
@@ -16,7 +16,9 @@ function App() {
   const [items, setItems] = useState([]);
   const [controlInput, setControlInput] = useState("");
   const [favorites, setFavorites] = useState([]);
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
+
+  console.log(addedGoods);
 
   function onChangeInput(e) {
     setControlInput(e.target.value);
@@ -24,17 +26,26 @@ function App() {
 
   useEffect(() => {
     async function fetchData() {
-      const cartResponse = await axios.get("http://localhost:4000/cart");
-      const favoritesResponse = await axios.get(
-        "http://localhost:4000/favorites"
-      );
-      const itemsResponse = await axios.get(" http://localhost:4000/items");
+      try {
+        const [cartResponse, favoritesResponse, itemsResponse] =
+          await Promise.all([
+            axios.get("http://localhost:4000/cart"),
+            axios.get("http://localhost:4000/favorites"),
+            axios.get(" http://localhost:4000/items"),
+          ]);
+        // const cartResponse = await axios.get("http://localhost:4000/cart");
+        // const favoritesResponse = await axios.get(
+        //   "http://localhost:4000/favorites"
+        // );
+        // const itemsResponse = await axios.get(" http://localhost:4000/items");
 
-      setIsLoading(false)
-      
-      setFavorites(favoritesResponse.data);
-      setAddedGoods(cartResponse.data);
-      setItems(itemsResponse.data);
+        setIsLoading(false);
+        setFavorites(favoritesResponse.data);
+        setAddedGoods(cartResponse.data);
+        setItems(itemsResponse.data);
+      } catch (error) {
+        alert("Ошибка при запросе данных");
+      }
     }
     fetchData();
   }, []);
@@ -68,9 +79,12 @@ function App() {
   }
 
   function deleteSneakersFromCart(id) {
-    // axios.delete(`https://640c498794ce1239b0a960f7.mockapi.io/cart/${id}`);
-    axios.delete(`http://localhost:4000/cart/${id}`);
-    setAddedGoods((prev) => prev.filter((item) => item.id !== id));
+    try {
+      axios.delete(`http://localhost:4000/cart/${id}`);
+      setAddedGoods((prev) => prev.filter((item) => item.id !== id));
+    } catch (error) {
+      alert("ошибка удаления товара с корзины");
+    }
   }
 
   async function onAddToFavorite(sneakers) {
@@ -94,50 +108,58 @@ function App() {
   }
 
   const isItemAdded = (id) => {
-    return addedGoods.some((obj)=>obj.id==id)
-  }
+    return addedGoods.some((obj) => obj.id == id);
+  };
 
   return (
-    <AppContext.Provider value={{items, addedGoods, favorites, isItemAdded, setShowDrawer, setAddedGoods}}>
-    <Router>
-      <div className="wrapper clear">
-        {showDrawer && (
+    <AppContext.Provider
+      value={{
+        items,
+        addedGoods,
+        favorites,
+        isItemAdded,
+        setShowDrawer,
+        setAddedGoods,
+      }}
+    >
+      <Router>
+        <div className="wrapper clear">
           <Drawer
             addedGoods={addedGoods}
             onClickCloseCart={onClickCloseCart}
             deleteSneakersFromCart={deleteSneakersFromCart}
+            opened={showDrawer}
           />
-        )}
 
-        <Header onClickShowCart={onClickShowCart} />
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <Home
-                addSneakersToCart={addSneakersToCart}
-                items={items}
-                controlInput={controlInput}
-                onAddToFavorite={onAddToFavorite}
-                onChangeInput={onChangeInput}
-                addedGoods={addedGoods}
-                isLoading={isLoading}
-                
-              />
-            }
-          />
-          <Route
-            path="/favorites"
-            element={
-              <Favorites
-                // favorites={favorites}
-                onAddToFavorite={onAddToFavorite}
-              />
-            }
-          />
-        </Routes>
-      </div>
-    </Router>
+          <Header onClickShowCart={onClickShowCart} />
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <Home
+                  addSneakersToCart={addSneakersToCart}
+                  items={items}
+                  controlInput={controlInput}
+                  onAddToFavorite={onAddToFavorite}
+                  onChangeInput={onChangeInput}
+                  addedGoods={addedGoods}
+                  isLoading={isLoading}
+                />
+              }
+            />
+            <Route
+              path="/favorites"
+              element={
+                <Favorites
+                  // favorites={favorites}
+                  onAddToFavorite={onAddToFavorite}
+                />
+              }
+            />
+            <Route path="/orders" element={<Orders />} />
+          </Routes>
+        </div>
+      </Router>
     </AppContext.Provider>
   );
 }

@@ -72,7 +72,7 @@ const Card = ({
               <span>Цена:</span>
               <b>{price} uah</b>
             </div>
-            <button
+            {addSneakersToCart && <button
               className="button"
               onClick={() => addSneakersToCart(objOfCard)}
             >
@@ -81,7 +81,7 @@ const Card = ({
                 src={isItemAdded(id) ? "/img/btn-checked.svg" : "/img/btn-plus.svg"}
                 alt="Plus"
               />
-            </button>
+            </button>}
           </div>
         </>
       )}
